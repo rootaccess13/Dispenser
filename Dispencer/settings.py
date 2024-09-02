@@ -114,7 +114,7 @@ LOGOUT_REDIRECT_URL = 'login'
 LOGIN_URL = 'login'
 
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = '/staticfiles'
 
 # Additional locations of static files
 STATICFILES_DIRS = [
@@ -126,6 +126,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Enable Django Compressor
 COMPRESS_ROOT = BASE_DIR / 'static'
 COMPRESS_ENABLED = True
+COMPRESS_OFFLINE = True
+
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
