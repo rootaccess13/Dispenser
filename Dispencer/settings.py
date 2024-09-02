@@ -29,15 +29,9 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'compressor',
     'rest_framework',
-    'django_crontab'
 ]
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
-
-CRONJOBS = [
-    ('*/1 * * * *', 'dashboard.cron.update_device_status', ['--verbose'], {}, '>> /tmp/device_status_cron.log 2>&1'),
-]
-
 
 
 MIDDLEWARE = [
