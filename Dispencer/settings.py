@@ -70,8 +70,16 @@ WSGI_APPLICATION = 'Dispencer.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'verceldb',
+        'USER': 'default',
+        'PASSWORD': 'sbMF4Krkzf3B',
+        'HOST': 'ep-plain-firefly-a43ijorp-pooler.us-east-1.aws.neon.tech',
+        'PORT': '5432',
+        'OPTIONS': {
+            'sslmode': 'require',
+            'options': 'endpoint=ep-plain-firefly-a43ijorp-pooler',
+        },
     }
 }
 
