@@ -1,4 +1,4 @@
-{% load compress %}
+
 {% load static %}
 
 <!DOCTYPE html>
@@ -10,9 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Django + Tailwind CSS + Flowbite</title>
 
-    {% compress css %}
     <link rel="stylesheet" href="{% static 'src/output.css' %}">
-    {% endcompress %}
 
 </head>
 <body class="bg-green-50">
