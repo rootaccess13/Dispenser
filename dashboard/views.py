@@ -97,4 +97,4 @@ class DeviceListView(APIView):
             return Response("Device not found", status=status.HTTP_404_NOT_FOUND)
         
         # Return the status value directly
-        return Response(str(device.status), content_type='text/plain', status=status.HTTP_200_OK)
+        return Response(device.status, content_type='text/plain', status=status.HTTP_200_OK)
