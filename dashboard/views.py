@@ -88,17 +88,13 @@ class DeviceListView(APIView):
     def get(self, request, device_id=None):
         # Check if a deviceId is provided in the URL
         if not device_id:
-            return Response({"error": "Device ID is required"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response("Device ID is required", status=status.HTTP_400_BAD_REQUEST)
         
         try:
             # Fetch the device from the database
             device = DeviceList.objects.get(deviceId=device_id)
         except DeviceList.DoesNotExist:
-            return Response({"error": "Device not found"}, status=status.HTTP_404_NOT_FOUND)
+            return Response("Device not found", status=status.HTTP_404_NOT_FOUND)
         
-        # Prepare the response data
-        response_data = {
-            "status": device.status
-        }
-        
-        return Response(response_data, status=status.HTTP_200_OK)
+        # Return the status value directly
+        return Response(str(device.status), content_type='text/plain', status=status.HTTP_200_OK)
