@@ -29,7 +29,7 @@
     <h1 class="text-3xl font-bold mb-4">Device Dashboard</h1>
     
     <div id="devices-count" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
-        <div class="bg-white border rounded-lg shadow-md p-4 border-l-4 border-blue-700 flex flex-col items-center">
+        <div data-modal-target="large-modal" data-modal-toggle="large-modal" class="bg-white border rounded-lg shadow-md p-4 border-l-4 border-blue-700 flex flex-col items-center">
             <img src="{% static 'img/gallon.png' %}" class="w-12 mb-4" alt="Gallon Image">
             <h2 class="text-xl font-semibold mb-2 text-center">Total Gallons</h2>
             <p id="device-count" class="text-3xl font-bold text-center">{{ device_count }}</p>
@@ -45,13 +45,19 @@
     <div class="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
         <div class="p-2">
             <button id="dropdownRadioButton" data-dropdown-toggle="dropdownRadio" class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" type="button">
-                <svg class="w-3 h-3 text-gray-500 dark:text-gray-400 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                <svg class="w-6 h-6 text-gray-500 dark:text-gray-400 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm3.982 13.982a1 1 0 0 1-1.414 0l-3.274-3.274A1.012 1.012 0 0 1 9 10V6a1 1 0 0 1 2 0v3.586l2.982 2.982a1 1 0 0 1 0 1.414Z"/>
                 </svg>
                 Last 30 days
                 <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
                 </svg>
+            </button>
+            <button id="export" data-modal-target="export-modal" data-modal-toggle="export-modal" class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" type="button">
+                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                    <path fill-rule="evenodd" d="M9 7V2.221a2 2 0 0 0-.5.365L4.586 6.5a2 2 0 0 0-.365.5H9Zm2 0V2h7a2 2 0 0 1 2 2v9.293l-2-2a1 1 0 0 0-1.414 1.414l.293.293h-6.586a1 1 0 1 0 0 2h6.586l-.293.293A1 1 0 0 0 18 16.707l2-2V20a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V9h5a2 2 0 0 0 2-2Z" clip-rule="evenodd"/>
+                  </svg>                  
+                Export
             </button>
             <!-- Dropdown menu -->
             <div id="dropdownRadio" class="z-10 hidden w-48 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600">
@@ -89,6 +95,7 @@
                 </ul>
             </div>
         </div>
+
         <label for="table-search" class="sr-only">Search</label>
         <div class="relative p-2 flex items-center">
             <div class="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none mr-2">
@@ -114,7 +121,11 @@
         <div class="flex flex-row justify-between items-center bg-gray-100 border-b-4 border-b-blue-200 p-2 rounded-t-lg">
             <h3 class="font-medium text-gray-900 dark:text-white">{{ data.device_location }}</h3>
             <div class="fle flex-col">
-                <p class="text-gray-600 dark:text-gray-400 text-sm"><span class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">192.168.1.70</span></p>
+                <p class="text-gray-600 dark:text-gray-400 text-sm">
+                    <span class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">
+                        {{data.deviceId}}
+                    </span>
+                </p>
             </div>
         </div>
         <div class="flex flex-row justify-between items-center bg-gray-100 p-2 rounded-lg mt-2">
@@ -128,30 +139,123 @@
             </p>
             <p class="text-gray-600 dark:text-gray-400 text-xs">{{ data.date_consumed }}</p>
         </div>
-    
-        <div class="p-2 bg-gray-50 rounded-md mt-4">
-            <p class="text-gray-600 dark:text-gray-400">Set Time: On - 8:00 AM</p>
-            <p class="text-gray-600 dark:text-gray-400">Set Time: Off - 9:00 PM</p>
-        </div>
-    {% if request.user.is_authenticated %}
-        <p 
-            data-modal-target="popup-modal" 
-            data-modal-toggle="popup-modal"
-            data-device-id="{{ data.deviceId }}" 
-            data-time-on="{{ data.time_on|time:"H:i" }}" 
-            data-time-off="{{ data.time_off|time:"H:i" }}"
-            class="font-medium text-blue-600 dark:text-blue-500 hover:underline mt-4"
-        >
-            Edit
-        </p>
-        {% endif %}
+
     </div>
 
     
       {% endfor %}
     </div>
   </div>
-  
+  <div id="export-modal" tabindex="-1" class="hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative p-4 w-full max-w-md max-h-full">
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 p-4">
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Select Device to Export</h3>
+            <select id="device-select" class="mt-4 block w-full p-2 border border-gray-300 rounded-lg">
+                <option value="">-- Select Device --</option>
+                {% for device in device_list %}
+                    <option value="{{ device.deviceId }}">{{ device.deviceId }}</option>
+                {% endfor %}
+            </select>
+            <button id="confirm-export" class="mt-4 w-full py-2.5 px-5 bg-blue-600 text-white rounded-lg">Export</button>
+            <button type="button" class="mt-2 w-full py-2.5 bg-gray-300 rounded-lg" onclick="closeModal('export-modal')">Close</button>
+        </div>
+    </div>
+</div>
+
+<div id="large-modal" tabindex="-1" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative w-full max-w-4xl max-h-full">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                    All Gallons
+                </h3>
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="large-modal">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <div class="p-4 md:p-5 space-y-4">
+
+
+                <div class="relative overflow-x-auto">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">
+                                    Device ID
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    <div class="flex items-center">
+                                        Location
+                                        <a href="#"><svg class="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"/>
+                  </svg></a>
+                                    </div>
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    <div class="flex items-center">
+                                        Time On
+                                        <a href="#"><svg class="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"/>
+                  </svg></a>
+                                    </div>
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    <div class="flex items-center">
+                                        Time Off
+                                        <a href="#"><svg class="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"/>
+                  </svg></a>
+                                    </div>
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    <span class="sr-only">Edit</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for data in device_list %}
+                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{data.deviceId}}
+                                </th>
+                                <td class="px-6 py-4">
+                                    {{data.device_location}}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{data.time_on}}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{data.time_off}}
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <a data-modal-target="popup-modal" 
+                                    data-modal-toggle="popup-modal"
+                                    data-location="{{ data.device_location }}"
+                                    data-device-id="{{ data.deviceId }}" 
+                                    data-time-on="{{ data.time_on|time:"H:i" }}" 
+                                    data-time-off="{{ data.time_off|time:"H:i" }}" href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                
+            </div>
+            <!-- Modal footer -->
+            <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                <button data-modal-hide="large-modal" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
+                <button data-modal-hide="large-modal" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div id="popup-modal" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
     <div class="relative p-4 w-full max-w-md max-h-full">
@@ -160,6 +264,10 @@
             <input type="hidden" id="device-id" name="device_id">
 
             <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 p-4">
+                <div class="mb-2">
+                    <label for="location" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Device Location</label>
+                    <input type="text" id="location" name="location" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="John" required />
+                </div>
                 <label for="time_on" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select time: ON</label>
                 <div class="relative mb-2">
                     <div class="absolute inset-y-0 end-0 top-0 flex items-center pe-3.5 pointer-events-none">
@@ -210,18 +318,20 @@
                 const deviceId = this.dataset.deviceId;
                 const timeOn = this.dataset.timeOn;
                 const timeOff = this.dataset.timeOff;
-                
+                const deviceLocation = this.dataset.location; // This should match your data attribute
+
                 // Set the device ID in the form
                 document.getElementById('device-id').value = deviceId;
-                
+                document.getElementById('location').value = deviceLocation; // Set location here
                 // Set the times in the form
                 document.getElementById('time_on').value = timeOn;
                 document.getElementById('time_off').value = timeOff;
-                
+
                 // Show the modal
                 document.getElementById('popup-modal').classList.remove('hidden');
             });
         });
+
         document.getElementById('reload').addEventListener('click', function() {
         document.getElementById('loadingSpinner').classList.remove('hidden');
         setTimeout(() => {
@@ -229,6 +339,23 @@
         }, 100);
     });
     });
+
+    document.getElementById('export').addEventListener('click', function() {
+    document.getElementById('export-modal').classList.remove('hidden');
+});
+
+    document.getElementById('confirm-export').addEventListener('click', function() {
+        const deviceId = document.getElementById('device-select').value;
+        if (deviceId) {
+            window.location.href = `api/export_device/${deviceId}/`;
+        } else {
+            alert("Please select a device.");
+        }
+    });
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).classList.add('hidden');
+    }
     </script>
     
 {% endblock content %}
