@@ -141,11 +141,16 @@ class DeviceListView(APIView):
         try:
             # Fetch the device from the database
             device = DeviceList.objects.get(deviceId=device_id)
+            
+            # Check the status and convert to "True" or "False" (string)
+            if device.status == True:
+                device.status = "True"
+            elif device.status == False:
+                device.status = "False"
         except DeviceList.DoesNotExist:
             return Response("Device not found", status=status.HTTP_404_NOT_FOUND)
-        
-        # Return the status value directly
-        return Response(str(device.status), content_type='text/plain', status=status.HTTP_200_OK)
+    
+        return Response(device.status, content_type='text/plain', status=status.HTTP_200_OK)
 
 
 class DeviceUpdateView(APIView):
