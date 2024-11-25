@@ -10,3 +10,12 @@ class DeviceListSerializer(serializers.ModelSerializer):
     class Meta:
         model = DeviceList
         exclude = ('status',)
+class DeviceListUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DeviceList
+        fields = ['time_on', 'time_off']
+
+class DeviceListDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DeviceList
+        fields = '__all__'
