@@ -1,0 +1,30 @@
+{% extends "dashboard/_base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-12">
+    <!-- Title Section -->
+    <h1 class="text-3xl font-bold mb-2 text-center mt-12">Setting Up the Dispenser Monitoring System</h1>
+    <p class="text-md font-normal mb-4 text-center">Follow these steps to successfully set up the dispenser monitoring system.</p>
+
+    <!-- Step 1: Requirements -->
+    <div class="bg-white p-6 rounded-lg shadow-md dark:bg-gray-800 dark:text-white mt-8">
+        <h2 class="text-xl font-semibold mb-4">Set up device Connectivity</h2>
+        <ol class="text-gray-600 dark:text-gray-400 list-disc pl-6">
+            <li>Plug in and turn on the switch of the device.</li>
+            <li>Open a browser and connect to the access point 192.168.4.1.</li>
+            <li>Configure the wifi connection, enter the ssid and password.</li>
+        </ol>
+    </div>
+
+    <div class="bg-white p-6 rounded-lg shadow-md dark:bg-gray-800 dark:text-white mt-8">
+        <h2 class="text-xl font-semibold mb-4">Installing the device in the dispenser</h2>
+        <ol class="text-gray-600 dark:text-gray-400 list-disc pl-6">
+            <li>Attach the enclosure box on the right side of the dispenser.</li>
+            <li>Place the sensor mount in the top side of the dispenser, right below the container.</li>
+        </ol>
+    </div>
+
+</div>
+
+{% endblock content %}
