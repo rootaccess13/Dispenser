@@ -1,0 +1,182 @@
+{% extends "admin/_base.html" %}
+{% load static %}
+
+{% block content %}
+
+<button data-drawer-target="default-sidebar" data-drawer-toggle="default-sidebar" aria-controls="default-sidebar" type="button" class="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+    <span class="sr-only">Open sidebar</span>
+    <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+    <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
+    </svg>
+ </button>
+ 
+ <aside id="default-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
+    <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
+       <ul class="space-y-2 font-medium">
+          <li>
+             <a href="{% url 'inventory' %}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                <span class="ms-3">Inventory</span>
+             </a>
+          </li>
+          <li>
+             <a href="{% url 'summary-report' %}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                <span class="flex-1 ms-3 whitespace-nowrap">Summary Report</span>
+             </a>
+          </li>
+          <li>
+             <a href="{% url 'added-gallons' %}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                <span class="flex-1 ms-3 whitespace-nowrap">Gallons Added</span>
+             </a>
+          </li>
+          <li>
+             <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                <span class="flex-1 ms-3 whitespace-nowrap">Gallons Deleted</span>
+             </a>
+          </li>
+
+       </ul>
+    </div>
+ </aside>
+ <div class="p-4 sm:ml-64">
+    <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
+
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <div class="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
+                <div>
+                    <form method="get" action="{% url 'summary-report' %}">
+                        <button id="dropdownRadioButton" data-dropdown-toggle="dropdownRadio" 
+                                class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" 
+                                type="button">
+                            Select Date Range
+                        </button>
+                        <div id="dropdownRadio" class="z-10 hidden w-48 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600">
+                            <ul class="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200">
+                                <!-- Add 'Today' option here -->
+                                <li>
+                                    <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                                        <input onchange="this.form.submit()" id="filter-radio-example-0" type="radio" name="date_range" value="0" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" {% if date_range == '0' %}checked{% endif %}>
+                                        <label for="filter-radio-example-0" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Today</label>
+                                    </div>
+                                </li>
+                                <!-- Other existing date range options -->
+                                <li>
+                                    <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                                        <input onchange="this.form.submit()" id="filter-radio-example-1" type="radio" name="date_range" value="1" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" {% if date_range == '1' %}checked{% endif %}>
+                                        <label for="filter-radio-example-1" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Last day</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                                        <input onchange="this.form.submit()" id="filter-radio-example-2" type="radio" name="date_range" value="7" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" {% if date_range == '7' %}checked{% endif %}>
+                                        <label for="filter-radio-example-2" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Last 7 days</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                                        <input onchange="this.form.submit()" id="filter-radio-example-3" type="radio" name="date_range" value="30" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" {% if date_range == '30' %}checked{% endif %}>
+                                        <label for="filter-radio-example-3" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Last 30 days</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                                        <input onchange="this.form.submit()" id="filter-radio-example-4" type="radio" name="date_range" value="365" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" {% if date_range == '365' %}checked{% endif %}>
+                                        <label for="filter-radio-example-4" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Last year</label>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </form>
+                    
+                </div>
+                <label for="table-search" class="sr-only">Search</label>
+                <div class="relative m-4">
+                    <button id="print-btn" class="mt-4 p-2 bg-blue-500 text-white rounded">Print</button>                    
+                </div>
+            </div>
+            <table id="inventory-table" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            Date
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Initial Inventory
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Total Consumed
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Gallons Added
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Gallons Deleted
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Final Inventory
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for data in gallons_today %}
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {{data.date_added}}
+                        </th>
+                        <td class="px-6 py-4">
+                            {{ data.total }}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{data.gallons_consumed}}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{data.gallons_added}}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{data.gallons_deleted}}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ data.final_inventory }}
+                        </td>                        
+                        
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+    </div>
+    <nav aria-label="Page navigation example">
+        <ul class="inline-flex -space-x-px text-sm">
+            <li>
+                <a href="?page=1&date_range={{ date_range }}" class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                    Previous
+                </a>
+            </li>
+            {% for num in page_obj.paginator.page_range %}
+                <li>
+                    <a href="?page={{ num }}&date_range={{ date_range }}" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                        {{ num }}
+                    </a>
+                </li>
+            {% endfor %}
+            <li>
+                <a href="?page={{ page_obj.paginator.num_pages }}&date_range={{ date_range }}" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                    Next
+                </a>
+            </li>
+        </ul>
+    </nav>
+ </div>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
+
+ <script>
+    document.getElementById('print-btn').addEventListener('click', function() {
+        const element = document.getElementById('inventory-table');
+        
+        // Use html2pdf.js to generate PDF
+        html2pdf()
+            .from(element)
+            .save('inventory-report.pdf');
+    });
+    </script>
+{% endblock content %}
