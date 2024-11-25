@@ -8,14 +8,20 @@ class DevicesAdmin(admin.ModelAdmin):
     search_fields = ('deviceId', 'status')
     ordering = ('-date_created',)
 
-@admin.register(DeviceList)
 class DeviceListAdmin(admin.ModelAdmin):
-    list_display = ('deviceId', 'status', 'device_location','limit', 'time_on', 'time_off','is_consumed', 'date_added')
+    list_display = ('deviceId', 'status', 'device_location', 'get_limit', 'time_on', 'time_off', 'is_consumed', 'date_added')
     list_filter = ('status',)
+
+    def get_limit(self, obj):
+        # Return the limit, or a default value if it's None
+        return obj.limit if obj.limit is not None else "No limit set"
+    get_limit.short_description = 'Limit'  # Customize the column header
+
 
 class GallonAdmin(admin.ModelAdmin):
     list_display = ('date_added', 'total_quantity', 'gallons_added', 'gallons_deleted', 'gallons_consumed', 'gallons_remaining')
     search_fields = ('date_added',)
 
 admin.site.register(Gallon, GallonAdmin)
+admin.site.register(DeviceList, DeviceListAdmin)
 admin.site.site_header = 'Dispencer Admin'
