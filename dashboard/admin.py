@@ -10,7 +10,7 @@ class DevicesAdmin(admin.ModelAdmin):
 
 @admin.register(DeviceList)
 class DeviceListAdmin(admin.ModelAdmin):
-    list_display = ('deviceId', 'status', 'device_location', 'limit', 'time_on', 'time_off','is_consumed', 'date_added')
+    list_display = ('deviceId', 'status', 'device_location', 'time_on', 'time_off','is_consumed', 'date_added')
     list_filter = ('status',)
 
 class GallonAdmin(admin.ModelAdmin):
