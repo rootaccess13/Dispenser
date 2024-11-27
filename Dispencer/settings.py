@@ -149,7 +149,7 @@ USE_I18N = True
 USE_TZ = True
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://4bc3-136-158-11-255.ngrok-free.app',
+    'https://13cf-136-158-11-255.ngrok-free.app',
 ]
 
 # Static files (CSS, JavaScript, Images)
